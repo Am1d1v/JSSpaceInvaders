@@ -10,7 +10,7 @@ class Player {
         this.y = this.game.height - this.height;
 
         // Player's Speed
-        this.speed = 15;
+        this.speed = 10;
     }
 
     // Draw Player's Model
@@ -33,6 +33,14 @@ class Player {
         this.x += this.speed;
         }
 
+        // Horizontal Boundaries
+        if(this.x < 0){
+            this.x = 0;
+        }
+
+        if(this.x > this.game.width - this.width){
+            this.x = this.game.width - this.width;
+        }
         
     }
 }
