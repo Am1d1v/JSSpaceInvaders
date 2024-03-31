@@ -88,7 +88,7 @@ class Projectile {
 
     // Shoot projectile
     start(x, y){
-        this.x = x;
+        this.x = x - this.width * 0.5;
         this.y = y;
         this.free = false;
     }
@@ -101,7 +101,39 @@ class Projectile {
 
 // Enemy Class. Draw and animate enemies
 class Enemy {
+    constructor(game){
+        this.game = game;
+        this.width;
+        this.height;
+        this.x;
+        this.y;
+    }
 
+    // Render Enemy
+    draw(context){
+        context.strokeRect(this.x, this.y, this.width, this.height);
+    }
+
+    // Update enemies movement
+    update(){
+
+    }
+
+}
+
+class Wave {
+    constructor(game){
+        this.game = game;
+        this.width = this.game.columns * this.game.enemySize;
+        this.height = this.game.rows * this.game.enemySize;
+        this.x = 0;
+        this.y = 0;
+    }
+
+    // Update wave position
+    render(context){
+        context.strokeRect(this.x, this.y, this.width, this.height);
+    }
 }
 
 // Game Class. Main logic of the game
@@ -120,6 +152,15 @@ class Game {
         this.numberOfProjectiles = 10;
         this.createProjectiles();
         
+        // Grid(columns and rows) of enemies
+        this.columns = 3;
+        this.rows = 3;
+        this.enemySize = 60;
+
+        // Waves of enemies
+        this.waves = [];
+        this.waves.push(new Wave(this));
+
         // Events
 
         // Add pressed key into the array
@@ -157,6 +198,10 @@ class Game {
         this.projectilesPool.forEach(projectile => {
             projectile.update();
             projectile.draw(context);
+        });
+
+        this.waves.forEach(wave => {
+            wave.render(context);
         });
     }
 
