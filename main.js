@@ -101,12 +101,14 @@ class Projectile {
 
 // Enemy Class. Draw and animate enemies
 class Enemy {
-    constructor(game){
+    constructor(game, positionX, positionY){
         this.game = game;
-        this.width;
-        this.height;
+        this.width = this.game.enemySize;
+        this.height = this.game.enemySize;
         this.x;
         this.y;
+        this.positionX = positionX;
+        this.positionY = positionY;
     }
 
     // Render Enemy
@@ -115,8 +117,9 @@ class Enemy {
     }
 
     // Update enemies movement
-    update(){
-
+    update(x, y){
+        this.x = x + this.positionX;
+        this.y = y + this.positionY;
     }
 
 }
@@ -130,6 +133,9 @@ class Wave {
         this.y = 0;
         this.speedX = 3;
         this.speedY = 0;
+
+        this.enemies = [];
+        this.create();
     }
 
     // Update wave position
@@ -148,8 +154,29 @@ class Wave {
             this.speedY = this.game.enemySize;
 
             this.y += this.speedY;
+            this.x += this.speedX;
         }
+
+        this.enemies.forEach(enemy => {
+            enemy.update(this.x, this.y);
+            enemy.draw(context);
+        });
     }
+
+    // Create array that contains wave of enemies
+    create(){
+
+        for(let y = 0; y < this.game.rows; y++){
+            for(let x = 0; x < this.game.columns; x++){
+                let enemyX = x * this.game.enemySize;
+                let enemyY = y * this.game.enemySize;
+                this.enemies.push(new Enemy(this.game, enemyX, enemyY))
+            }
+        }
+
+        
+    }
+    
 }
 
 // Game Class. Main logic of the game
