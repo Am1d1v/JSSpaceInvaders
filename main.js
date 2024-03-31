@@ -43,6 +43,15 @@ class Player {
         }
         
     }
+
+    // Shoot Projectile
+    shoot(){
+        const projectile = this.game.getProjectile();
+
+        if(projectile){
+            projectile.start(this.x, this.y);
+        }
+    }
 }
 
 // Projectile Class. Player's shooting elements
@@ -66,14 +75,16 @@ class Projectile {
     }
 
     // Update projectile's data
-    update(context){
+    update(){
         if(!this.free){
-            this.y = -this.speed;
+            this.y -= this.speed;
         }
     }
 
     // Shoot projectile
-    start(){
+    start(x, y){
+        this.x = x;
+        this.y = y;
         this.free = false;
     }
 
@@ -113,7 +124,10 @@ class Game {
                 this.keys.push(e.key)
             }
             
-            console.log(this.keys);
+            // Shoot Projectile
+            if(e.key === '1'){
+                this.player.shoot();
+            }
         })
 
         // Remove pressed key into the array
@@ -127,12 +141,18 @@ class Game {
             }
                 
         })
+
+    
     }
 
     // Draw objects
     render(context){
         this.player.draw(context);
         this.player.update();
+        this.projectilesPool.forEach(projectile => {
+            projectile.update();
+            projectile.draw(context);
+        });
     }
 
     // Create projectiles onject pool
