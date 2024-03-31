@@ -128,11 +128,27 @@ class Wave {
         this.height = this.game.rows * this.game.enemySize;
         this.x = 0;
         this.y = 0;
+        this.speedX = 3;
+        this.speedY = 0;
     }
 
     // Update wave position
     render(context){
+
+        this.speedY = 0;
+
         context.strokeRect(this.x, this.y, this.width, this.height);
+        this.x += this.speedX;
+
+        // Waves Horizontal Boundaries
+        if(this.x < 0 || this.x > this.game.width - this.width){
+            this.speedX *= -1;
+
+            // Waves Vertical Movement
+            this.speedY = this.game.enemySize;
+
+            this.y += this.speedY;
+        }
     }
 }
 
@@ -229,6 +245,8 @@ window.addEventListener('load', () => {
     const context = canvas.getContext('2d');
     canvas.width = 600;
     canvas.height = 900;
+    context.strokeStyle = 'white';
+    context.lineWidth = 5;
 
     const game = new Game(canvas);
     
