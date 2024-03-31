@@ -49,7 +49,7 @@ class Player {
         const projectile = this.game.getProjectile();
 
         if(projectile){
-            projectile.start(this.x, this.y);
+            projectile.start(this.x + this.width * 0.5, this.y);
         }
     }
 }
@@ -78,6 +78,11 @@ class Projectile {
     update(){
         if(!this.free){
             this.y -= this.speed;
+        }
+
+        // Reset projectiles and become available in the pool again when they fly off screen
+        if(this.y < -this.height){
+            this.reset();
         }
     }
 
