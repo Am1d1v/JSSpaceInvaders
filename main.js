@@ -47,7 +47,30 @@ class Player {
 
 // Projectile Class. Player's shooting elements
 class Projectile {
+    constructor(){
+        this.width = 4;
+        this.height = 20;
+        this.x = 0;
+        this.y = 0;
+        this.speed = 20;
 
+        // Projectile is sitting in the poop and ready to be used.
+        this.free = true;
+    }
+
+    // Render projectile
+    draw(context){
+        if(!this.free){
+            context.fillRect(this.x, this.y, this.width, this.height);
+        }
+    }
+
+    // Update projectile's data
+    update(context){
+        if(!this.free){
+            this.y = -this.speed;
+        }
+    }
 }
 
 // Enemy Class. Draw and animate enemies
