@@ -71,6 +71,16 @@ class Projectile {
             this.y = -this.speed;
         }
     }
+
+    // Shoot projectile
+    start(){
+        this.free = false;
+    }
+
+    // Return back to the object pool
+    reset(){
+        this.free = true;
+    }
 }
 
 // Enemy Class. Draw and animate enemies
@@ -89,6 +99,11 @@ class Game {
         // Pressed Keys
         this.keys = []
 
+        // Projectiles Pool
+        this.projectilesPool = [];
+        this.numberOfProjectiles = 10;
+        this.createProjectiles();
+        
         // Events
 
         // Add pressed key into the array
@@ -119,6 +134,23 @@ class Game {
         this.player.draw(context);
         this.player.update();
     }
+
+    // Create projectiles onject pool
+    createProjectiles(){
+        for(let i = 0; i < this.numberOfProjectiles; i++){
+            this.projectilesPool.push(new Projectile());
+        }
+    }
+
+    // Get free projectile object from the pool
+    getProjectile(){
+        for(let i = 0; i < this.projectilesPool.length; i++){
+            if(this.projectilesPool[i].free){
+                return this.projectilesPool[i];
+            }
+        }
+    }
+    
 }
 
 
