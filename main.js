@@ -268,22 +268,26 @@ class Game {
         // Game over.
         this.gameOver = false;
 
+        // Fired Projectile. Attack was pressed
+        this.fired = false;
+
         // Events
 
         // Add pressed key into the array
         window.addEventListener('keydown', (e) => {
             
+            // Shoot Projectile
+            if(e.key === '1' && !this.fired){
+                this.player.shoot();
+            }
+            this.fired = true;
+
             if(this.keys.indexOf(e.key) === -1){
                 this.keys.push(e.key)
             }
-            
-            // Shoot Projectile
-            if(e.key === '1'){
-                this.player.shoot();
-            }
 
             // Restart Game
-            if(e.key.toLowerCase() === 'r'){
+            if(e.key.toLowerCase() === 'r' && this.gameOver){
                 this.restart();
             }
         })
@@ -296,6 +300,8 @@ class Game {
             if(index > -1){
                 this.keys.splice(index, 1);
             }  
+
+            this.fired = false;
         })
     
     }
