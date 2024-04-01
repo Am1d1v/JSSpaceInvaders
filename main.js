@@ -133,7 +133,14 @@ class Enemy {
                 // When enemy is destroyed scores increase by 1
                 this.game.scores += 1;
             }
-        })
+        });
+
+        // Lose Condition
+        if(this.y + this.height > this.game.height){
+            this.game.gameOver = true;
+            this.markedForDeletion = true;
+        }
+
     }
 
 }
@@ -225,7 +232,8 @@ class Game {
         // Scores
         this.scores = 0;
 
-
+        // Game over.
+        this.gameOver = false;
 
         // Events
 
@@ -301,6 +309,13 @@ class Game {
     // Player's Status (Lives, Ammoes, Scores)
     drawStatus(context){
         context.fillText(`Score: ${this.scores}`, 20, 40);
+
+        // If game is over
+        if(this.gameOver){
+            context.textAlign = 'center';
+            context.font = 100;
+            context.fillText('GAME OVER', this.width * 0.5, this.height * 0.5);
+        }
     }
 }
 
