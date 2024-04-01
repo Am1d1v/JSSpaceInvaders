@@ -9,6 +9,9 @@ class Player {
         this.x = this.game.width * 0.5 - this.width * 0.5;
         this.y = this.game.height - this.height;
 
+        // Player's Lives
+        this.lives = 3;
+
         // Player's Speed
         this.speed = 10;
     }
@@ -133,6 +136,22 @@ class Enemy {
                 // When enemy is destroyed scores increase by 1
                 this.game.scores += 1;
             }
+
+        // Check collision between enemies and player
+        if(this.game.checkCollision(this, this.game.player)){
+            this.markedForDeletion = true;
+
+            // When collision decrease scores by 1
+            if(!this.game.gameOver){
+                this.game.scores -= 1;
+                this.game.player.lives--;
+            }
+
+            if(this.game.player.lives < 1){
+                this.game.gameOver = true;
+            }
+        } 
+            
         });
 
         // Lose Condition
@@ -288,6 +307,9 @@ class Game {
                 this.newWave();
                 this.waveCount += 1;
                 wave.nextWaveTrigger = true;
+
+                // When wave of enemies is destroyed add 1 health point
+                this.player.lives++;
             }
         });
     }
@@ -327,6 +349,10 @@ class Game {
         context.fillText(`Score: ${this.scores}`, 20, 40);
         context.fillText(`Wave: ${this.waveCount}`, 20, 80);
 
+        for(let i = 0; i < this.player.lives; i++){
+            context.fillRect(20 + 10 * i, 100, 5, 20);
+        }
+
         // If game is over
         if(this.gameOver){
             context.textAlign = 'center';
@@ -339,9 +365,12 @@ class Game {
 
     // Waves Generation
     newWave(){
-        this.columns++;
-        this.rows++;
-        this.waves.push(new Wave(this));
+        if(Math.random() > 0.5 && this.columns * this.enemySize < this.width * 0.8){
+            this.columns++;
+        } else if(this.rows * this.enemySize < this.height * 0.6) {
+            this.rows++;
+        }  
+        this.waves.push(new Wave(this))
     }
 }
 
