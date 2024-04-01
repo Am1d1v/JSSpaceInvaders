@@ -130,7 +130,7 @@ class Wave {
         this.width = this.game.columns * this.game.enemySize;
         this.height = this.game.rows * this.game.enemySize;
         this.x = 0;
-        this.y = 0;
+        this.y = -this.height;
         this.speedX = 3;
         this.speedY = 0;
 
@@ -156,6 +156,8 @@ class Wave {
             this.y += this.speedY;
             this.x += this.speedX;
         }
+
+        if(this.y < 0) this.y += 3;
 
         this.enemies.forEach(enemy => {
             enemy.update(this.x, this.y);
@@ -263,6 +265,25 @@ class Game {
             }
         }
     }
+
+    // Collision Detection
+    checkCollision(a, b){
+
+        if(a.x < b.x + b.width &&
+           a.x + a.width > b.x && 
+           a.y < b.y + b.height &&
+           a.y + a.height > b.y
+          ){
+            // Collision
+
+
+        } else {
+            // No Collision
+
+
+        }
+    }
+
     
 }
 
