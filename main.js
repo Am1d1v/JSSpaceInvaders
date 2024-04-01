@@ -120,6 +120,13 @@ class Enemy {
     update(x, y){
         this.x = x + this.positionX;
         this.y = y + this.positionY;
+
+        // Check collision between enemies and projectiles
+        this.game.projectilesPool.forEach(projectile => {
+            if(this.game.checkCollision(this, projectile)){
+                console.log('Collision Detected');
+            }
+        })
     }
 
 }
@@ -268,23 +275,16 @@ class Game {
 
     // Collision Detection
     checkCollision(a, b){
-
-        if(a.x < b.x + b.width &&
-           a.x + a.width > b.x && 
-           a.y < b.y + b.height &&
-           a.y + a.height > b.y
-          ){
-            // Collision
-
-
-        } else {
-            // No Collision
-
-
-        }
+        
+        return(a.x < b.x + b.width &&
+               a.x + a.width > b.x && 
+               a.y < b.y + b.height &&
+               a.y + a.height > b.y
+            ) 
     }
 
     
+
 }
 
 
