@@ -126,7 +126,12 @@ class Enemy {
         this.game.projectilesPool.forEach(projectile => {
             if(!projectile.free && this.game.checkCollision(this, projectile)){
                 this.markedForDeletion = true;
+
+                // Reset projectiles when it hits enemy
                 projectile.reset();
+
+                // When enemy is destroyed scores increase by 1
+                this.game.scores += 1;
             }
         })
     }
@@ -152,7 +157,7 @@ class Wave {
 
         this.speedY = 0;
 
-        context.strokeRect(this.x, this.y, this.width, this.height);
+        //context.strokeRect(this.x, this.y, this.width, this.height);
         this.x += this.speedX;
 
         // Waves Horizontal Boundaries
@@ -217,6 +222,11 @@ class Game {
         this.waves = [];
         this.waves.push(new Wave(this));
 
+        // Scores
+        this.scores = 0;
+
+
+
         // Events
 
         // Add pressed key into the array
@@ -249,6 +259,7 @@ class Game {
 
     // Draw objects
     render(context){
+        this.drawStatus(context)
         this.player.draw(context);
         this.player.update();
         this.projectilesPool.forEach(projectile => {
@@ -287,8 +298,10 @@ class Game {
             ) 
     }
 
-    
-
+    // Player's Status (Lives, Ammoes, Scores)
+    drawStatus(context){
+        context.fillText(`Score: ${this.scores}`, 20, 40);
+    }
 }
 
 
@@ -297,8 +310,12 @@ window.addEventListener('load', () => {
     const context = canvas.getContext('2d');
     canvas.width = 600;
     canvas.height = 900;
+    context.fillStyle = 'white';
     context.strokeStyle = 'white';
     context.lineWidth = 5;
+
+    // Status text
+    context.font = '30px Impact';
 
     const game = new Game(canvas);
     
