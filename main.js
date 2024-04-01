@@ -55,6 +55,13 @@ class Player {
             projectile.start(this.x + this.width * 0.5, this.y);
         }
     }
+
+    // Restart Player
+    restart(){
+        this.x = this.game.width * 0.5 - this.width * 0.5;
+        this.y = this.game.height - this.height;
+        this.lives = 3;
+    }
 }
 
 // Projectile Class. Player's shooting elements
@@ -274,6 +281,11 @@ class Game {
             if(e.key === '1'){
                 this.player.shoot();
             }
+
+            // Restart Game
+            if(e.key.toLowerCase() === 'r'){
+                this.restart();
+            }
         })
 
         // Remove pressed key into the array
@@ -283,11 +295,8 @@ class Game {
 
             if(index > -1){
                 this.keys.splice(index, 1);
-                console.log(this.keys);
-            }
-                
+            }  
         })
-
     
     }
 
@@ -375,6 +384,28 @@ class Game {
             this.rows++;
         }  
         this.waves.push(new Wave(this))
+    }
+
+    // Restart Game
+    restart(){
+        // Restart Player
+        this.player.restart();
+
+        // Set default values
+        this.columns = 3;
+        this.rows = 3;
+
+        // Waves of enemies
+        this.waves = [];
+        this.waves.push(new Wave(this));
+        // Number of waves
+        this.waveCount = 1;
+
+        // Scores
+        this.scores = 0;
+
+        // Game over.
+        this.gameOver = false;
     }
 }
 
