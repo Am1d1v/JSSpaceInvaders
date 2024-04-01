@@ -156,6 +156,10 @@ class Wave {
         this.speedY = 0;
 
         this.enemies = [];
+
+        // When wave os enemies is destroyed trigger new wave
+        this.nextWaveTrigger = false; 
+
         this.create();
     }
 
@@ -228,6 +232,8 @@ class Game {
         // Waves of enemies
         this.waves = [];
         this.waves.push(new Wave(this));
+        // Number of waves
+        this.waveCount = 1;
 
         // Scores
         this.scores = 0;
@@ -277,6 +283,12 @@ class Game {
 
         this.waves.forEach(wave => {
             wave.render(context);
+
+            if(wave.enemies.length < 1 && !wave.nextWaveTrigger && !this.gameOver){
+                this.newWave();
+                this.waveCount += 1;
+                wave.nextWaveTrigger = true;
+            }
         });
     }
 
@@ -308,7 +320,12 @@ class Game {
 
     // Player's Status (Lives, Ammoes, Scores)
     drawStatus(context){
+        context.save();
+        context.shadowOffsetX = 3;
+        context.shadowOffsetY = 3;
+        context.shadowColor = 'black';
         context.fillText(`Score: ${this.scores}`, 20, 40);
+        context.fillText(`Wave: ${this.waveCount}`, 20, 80);
 
         // If game is over
         if(this.gameOver){
@@ -316,6 +333,15 @@ class Game {
             context.font = 100;
             context.fillText('GAME OVER', this.width * 0.5, this.height * 0.5);
         }
+        context.restore();
+    }
+
+
+    // Waves Generation
+    newWave(){
+        this.columns++;
+        this.rows++;
+        this.waves.push(new Wave(this));
     }
 }
 
