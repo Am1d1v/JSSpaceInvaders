@@ -109,6 +109,7 @@ class Enemy {
         this.y;
         this.positionX = positionX;
         this.positionY = positionY;
+        this.markedForDeletion = false;
     }
 
     // Render Enemy
@@ -124,7 +125,7 @@ class Enemy {
         // Check collision between enemies and projectiles
         this.game.projectilesPool.forEach(projectile => {
             if(this.game.checkCollision(this, projectile)){
-                console.log('Collision Detected');
+                this.markedForDeletion = true;
             }
         })
     }
@@ -170,6 +171,8 @@ class Wave {
             enemy.update(this.x, this.y);
             enemy.draw(context);
         });
+
+        this.enemies = this.enemies.filter(object => !object.markedForDeletion)
     }
 
     // Create array that contains wave of enemies
