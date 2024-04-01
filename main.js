@@ -108,8 +108,8 @@ class Enemy {
         this.game = game;
         this.width = this.game.enemySize;
         this.height = this.game.enemySize;
-        this.x;
-        this.y;
+        this.x = 0;
+        this.y = 0;
         this.positionX = positionX;
         this.positionY = positionY;
         this.markedForDeletion = false;
@@ -134,8 +134,10 @@ class Enemy {
                 projectile.reset();
 
                 // When enemy is destroyed scores increase by 1
-                this.game.scores += 1;
+                if(!this.game.gameOver) this.game.scores++;
+                
             }
+        });
 
         // Check collision between enemies and player
         if(this.game.checkCollision(this, this.game.player)){
@@ -151,18 +153,17 @@ class Enemy {
                 this.game.gameOver = true;
             }
         } 
-            
-        });
 
-        // Lose Condition
-        if(this.y + this.height > this.game.height){
+         // Lose Condition
+         if(this.y + this.height > this.game.height){
             this.game.gameOver = true;
             this.markedForDeletion = true;
         }
 
-    }
-
+            
+    };
 }
+       
 
 class Wave {
     constructor(game){
@@ -356,8 +357,11 @@ class Game {
         // If game is over
         if(this.gameOver){
             context.textAlign = 'center';
-            context.font = 100;
+            context.font = '100px Impact';
             context.fillText('GAME OVER', this.width * 0.5, this.height * 0.5);
+
+            context.font = '20px Impact';
+            context.fillText('Press R to restart', this.width * 0.5 + 30, this.height * 0.5 + 30);
         }
         context.restore();
     }
