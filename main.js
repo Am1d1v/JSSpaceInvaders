@@ -124,7 +124,7 @@ class Enemy {
 
     // Render Enemy
     draw(context){
-        context.strokeRect(this.x, this.y, this.width, this.height);
+        // context.strokeRect(this.x, this.y, this.width, this.height);
 
         // Draw Enemy Image
         context.drawImage(this.image, this.frameX * this.width, this.frameY * this.height, this.width, this.height, this.x, this.y, this.width, this.height);
@@ -138,7 +138,7 @@ class Enemy {
         // Check collision between enemies and projectiles
         this.game.projectilesPool.forEach(projectile => {
             if(!projectile.free && this.game.checkCollision(this, projectile)){
-                this.markedForDeletion = true;
+                this.hit(1);
 
                 // Reset projectiles when it hits enemy
                 projectile.reset();
@@ -148,6 +148,15 @@ class Enemy {
                 
             }
         });
+
+        // When enemy destroyed trigger horizontal frames
+        if(this.lives < 1){
+            this.frameX++;
+
+            if(this.frameX > this.maxFrame){
+                this.markedForDeletion = true;
+            }
+        }
 
         // Check collision between enemies and player
         if(this.game.checkCollision(this, this.game.player)){
@@ -169,9 +178,13 @@ class Enemy {
             this.game.gameOver = true;
             this.markedForDeletion = true;
         }
-
-            
+  
     };
+
+    // Change frameY when enemy gets hit 
+    hit(damage){
+        this.lives -= damage;
+    }
 }
 
 // Beetlemorph Enemy Class
@@ -183,6 +196,12 @@ class Beetlemorph extends Enemy {
         // Horizontal/Vertical Frames
         this.frameX = 0;
         this.frameY = Math.floor(Math.random() * 4);
+
+        // Max frames of the creatur
+        this.maxFrame = 2;
+
+        // Creature's health points
+        this.lives = 1;
     }
 }
        
@@ -192,9 +211,9 @@ class Wave {
         this.game = game;
         this.width = this.game.columns * this.game.enemySize;
         this.height = this.game.rows * this.game.enemySize;
-        this.x = 0;
+        this.x = this.game.width * 0.5 - this.width * 0.5;
         this.y = -this.height;
-        this.speedX = 3;
+        this.speedX = Math.random() < 0.5 ? 1 : -1;
         this.speedY = 0;
 
         this.enemies = [];
