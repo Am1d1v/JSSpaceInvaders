@@ -170,6 +170,14 @@ class Enemy {
             
     };
 }
+
+// Beetlemorph Enemy Class
+class Beetlemorph extends Enemy {
+    constructor(game, positionX, positionY){
+        super(game, positionX, positionY);
+        this.image = document.querySelector('beetlemorph');
+    }
+}
        
 
 class Wave {
