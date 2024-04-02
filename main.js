@@ -127,7 +127,7 @@ class Enemy {
         context.strokeRect(this.x, this.y, this.width, this.height);
 
         // Draw Enemy Image
-        context.drawImage(this.image, this.x, this.y);
+        context.drawImage(this.image, this.frameX * this.width, this.frameY * this.height, this.width, this.height, this.x, this.y, this.width, this.height);
     }
 
     // Update enemies movement
@@ -179,6 +179,10 @@ class Beetlemorph extends Enemy {
     constructor(game, positionX, positionY){
         super(game, positionX, positionY);
         this.image = document.querySelector('#beetlemorphEnemy');
+
+        // Horizontal/Vertical Frames
+        this.frameX = 0;
+        this.frameY = Math.floor(Math.random() * 4);
     }
 }
        
@@ -265,7 +269,7 @@ class Game {
         // Grid(columns and rows) of enemies
         this.columns = 3;
         this.rows = 3;
-        this.enemySize = 60;
+        this.enemySize = 80;
 
         // Waves of enemies
         this.waves = [];
