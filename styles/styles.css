@@ -12,4 +12,8 @@
   transform: translate(-50%, -50%);
   background: url(../assets/background.png);
   background-size: cover;
+}
+
+#beetlemorphEnemy {
+  display: none;
 }/*# sourceMappingURL=styles.css.map */
