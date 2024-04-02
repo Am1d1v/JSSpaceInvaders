@@ -341,7 +341,8 @@ class Game {
     }
 
     // Draw objects
-    render(context){
+    render(context, deltaTime){
+        
         this.drawStatus(context)
         this.player.draw(context);
         this.player.update();
@@ -464,13 +465,17 @@ window.addEventListener('load', () => {
 
     const game = new Game(canvas);
     
+    let lastTime = 0;
+    function animate(timeStamp){
+        const deltaTime = timeStamp - lastTime;
+        lastTime = timeStamp;
 
-    function animate(){
+
         // Clear Canvas
         context.clearRect(0, 0, canvas.width, canvas.height);
 
-        game.render(context);
+        game.render(context, deltaTime);
         window.requestAnimationFrame(animate);
     }
-    animate();
+    animate(0);
 });
