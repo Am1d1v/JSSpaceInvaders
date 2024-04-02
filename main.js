@@ -151,7 +151,7 @@ class Enemy {
 
         // When enemy destroyed trigger horizontal frames
         if(this.lives < 1){
-            this.frameX++;
+            if(this.game.spriteUpdate) this.frameX++;
 
             if(this.frameX > this.maxFrame){
                 this.markedForDeletion = true;
@@ -305,6 +305,12 @@ class Game {
         // Fired Projectile. Attack was pressed
         this.fired = false;
 
+        // Sprite Update
+        this.spriteUpdate = false;
+        this.spriteTimer = 0;
+        this.spriteInterval = 120;
+
+
         // Events
 
         // Add pressed key into the array
@@ -342,7 +348,15 @@ class Game {
 
     // Draw objects
     render(context, deltaTime){
-        
+        // Sprite Timing
+        if(this.spriteTimer > this.spriteInterval){
+            this.spriteUpdate = true;
+            this.spriteTimer = 0;
+        } else {
+            this.spriteUpdate = false;
+            this.spriteTimer += deltaTime;
+        }
+
         this.drawStatus(context)
         this.player.draw(context);
         this.player.update();
