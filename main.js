@@ -240,6 +240,26 @@ class Beetlemorph extends Enemy {
         this.lives = 1;
     }
 }
+
+// Rhinomorph Enemy Class
+class Rhinomorph extends Enemy {
+    constructor(game, positionX, positionY){
+        super(game, positionX, positionY);
+        this.image = document.querySelector('#beetlemorphEnemy');
+
+        // Horizontal/Vertical Frames
+        this.frameX = 0;
+        this.frameY = Math.floor(Math.random() * 4);
+
+        // Max frames of the creatur
+        this.maxFrame = 2;
+
+        // Creature's health points
+        this.lives = 3;
+    }
+}
+
+
        
 
 class Wave {
