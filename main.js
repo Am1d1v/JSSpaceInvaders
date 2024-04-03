@@ -245,14 +245,14 @@ class Beetlemorph extends Enemy {
 class Rhinomorph extends Enemy {
     constructor(game, positionX, positionY){
         super(game, positionX, positionY);
-        this.image = document.querySelector('#beetlemorphEnemy');
+        this.image = document.querySelector('#rhinomorphEnemy');
 
         // Horizontal/Vertical Frames
         this.frameX = 0;
         this.frameY = Math.floor(Math.random() * 4);
 
         // Max frames of the creatur
-        this.maxFrame = 2;
+        this.maxFrame = 5;
 
         // Creature's health points
         this.lives = 3;
@@ -316,7 +316,10 @@ class Wave {
             for(let x = 0; x < this.game.columns; x++){
                 let enemyX = x * this.game.enemySize;
                 let enemyY = y * this.game.enemySize;
-                this.enemies.push(new Beetlemorph(this.game, enemyX, enemyY))
+                //this.enemies.push(new Beetlemorph(this.game, enemyX, enemyY))
+                Math.random() > 0.8 
+                            ? this.enemies.push(new Rhinomorph(this.game, enemyX, enemyY))
+                            : this.enemies.push(new Beetlemorph(this.game, enemyX, enemyY))
             }
         }
 
