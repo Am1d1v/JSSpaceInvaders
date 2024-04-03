@@ -12,6 +12,9 @@ class Player {
         // Player's Lives
         this.lives = 3;
 
+        // Maximum Player's Health Points
+        this.maxLives = 10;
+
         // Player's Speed
         this.speed = 10;
 
@@ -407,7 +410,8 @@ class Game {
                 wave.nextWaveTrigger = true;
 
                 // When wave of enemies is destroyed add 1 health point
-                this.player.lives++;
+                if(this.player.lives < this.player.maxLives) this.player.lives++;
+                
             }
         });
     }
@@ -447,8 +451,12 @@ class Game {
         context.fillText(`Score: ${this.scores}`, 20, 40);
         context.fillText(`Wave: ${this.waveCount}`, 20, 80);
 
+        for(let i = 0; i < this.player.maxLives; i++){
+            context.strokeRect(20 + 20 * i, 100, 10, 15);
+        }
+
         for(let i = 0; i < this.player.lives; i++){
-            context.fillRect(20 + 10 * i, 100, 5, 20);
+            context.fillRect(20 + 20 * i, 100, 10, 15);
         }
 
         // If game is over
@@ -505,7 +513,7 @@ window.addEventListener('load', () => {
     canvas.height = 900;
     context.fillStyle = 'white';
     context.strokeStyle = 'white';
-    context.lineWidth = 5;
+    context.lineWidth = 1;
 
     // Status text
     context.font = '30px Impact';
