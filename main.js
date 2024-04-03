@@ -17,21 +17,37 @@ class Player {
 
         this.image = document.querySelector('#player');
 
-        // Horizontal Frames
+        // Jets
+        this.jets = document.querySelector('#playerJets');
+
+        // Player's Horizontal Frames
         this.frameX = 0;
+
+        // Jet's Horizontal Frames
+        this.jetsFrameX = 1;
     }
 
     // Draw Player's Model
     draw(context){
         //context.fillRect(this.x, this.y, this.width, this.height);
 
-        // Handle sprite frames
+        // Handle player's sprite frames
         if(this.game.keys.indexOf('1') > -1){
             this.frameX = 1;
         } else {
             this.frameX = 0;
         }
 
+        // Handle jet's sprite frames
+        if(this.game.keys.indexOf('ArrowRight') > -1){
+            this.jetsFrameX = 2;
+        } else if (this.game.keys.indexOf('ArrowLeft') > -1) {
+            this.jetsFrameX = 0
+        } else {
+            this.jetsFrameX = 1;
+        }
+
+        context.drawImage(this.jets, this.jetsFrameX * this. width, 0, this.width, this.height, this.x, this.y, this.width, this.height);
         context.drawImage(this.image, this.frameX * this. width, 0, this.width, this.height, this.x, this.y, this.width, this.height);
     }
 
@@ -332,7 +348,7 @@ class Game {
 
         // Add pressed key into the array
         window.addEventListener('keydown', (e) => {
-            
+
             // Shoot Projectile
             if(e.key === '1' && !this.fired){
                 this.player.shoot();
