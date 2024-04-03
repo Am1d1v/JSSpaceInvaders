@@ -80,7 +80,10 @@ class Projectile {
     // Render projectile
     draw(context){
         if(!this.free){
+            context.save()
+            context.fillStyle = 'blue';
             context.fillRect(this.x, this.y, this.width, this.height);
+            context.restore();
         }
     }
 
@@ -137,7 +140,7 @@ class Enemy {
 
         // Check collision between enemies and projectiles
         this.game.projectilesPool.forEach(projectile => {
-            if(!projectile.free && this.game.checkCollision(this, projectile)){
+            if(!projectile.free && this.game.checkCollision(this, projectile) && this.lives > 0){
                 this.hit(1);
 
                 // Reset projectiles when it hits enemy

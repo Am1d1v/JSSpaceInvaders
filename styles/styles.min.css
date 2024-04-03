@@ -1,1 +1,1 @@
-*{box-sizing:border-box;margin:0;padding:0}#canvas1{position:absolute;border:5px solid #000;top:50%;left:50%;transform:translate(-50%, -50%);background:url(../assets/background.png);background-size:cover}#beetlemorphEnemy{display:none}/*# sourceMappingURL=styles.min.css.map */
+*{box-sizing:border-box;margin:0;padding:0}#canvas1{position:absolute;border:5px solid #000;top:50%;left:50%;transform:translate(-50%, -50%);background:url(../assets/background.png);background-size:cover}#beetlemorphEnemy,#player,#playerJets{display:none}/*# sourceMappingURL=styles.min.css.map */

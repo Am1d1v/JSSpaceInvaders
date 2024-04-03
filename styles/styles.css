@@ -14,6 +14,6 @@
   background-size: cover;
 }
 
-#beetlemorphEnemy {
+#beetlemorphEnemy, #player, #playerJets {
   display: none;
 }/*# sourceMappingURL=styles.css.map */
