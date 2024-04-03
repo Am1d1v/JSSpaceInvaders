@@ -266,6 +266,38 @@ class Rhinomorph extends Enemy {
         this.lives -= damage;
         this.frameX = this.maxLives - Math.floor(this.lives);
     }
+
+}
+// Boss Enemy Class
+class Boss extends Enemy {
+    constructor(game){
+        super(game);
+        this.image = document.querySelector('#bossEnemy');
+        this.game = game;
+        this.width = 200;
+        this.height = 200;
+        this.x = this.game.width * 0.5 - this.width * 0.5
+        this.y = -this.height;
+
+        // Horizontal/Vertical Frames
+        this.frameX = 0;
+        this.frameY = Math.floor(Math.random() * 4);
+
+        // Max frames of the creatur
+        this.maxFrame = 5;
+
+        // Creature's health points
+        this.lives = 6;
+
+        // Maximum creature's live. Using for frameX sprites to show that enemy damaged 
+        this.maxLives = 6;
+    }
+
+    // Change frameX when enemy gets hit. 
+    hit(damage){
+        this.lives -= damage;
+        this.frameX = this.maxLives - Math.floor(this.lives);
+    }
 }
 
 
