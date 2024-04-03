@@ -251,7 +251,7 @@ class Rhinomorph extends Enemy {
         this.frameX = 0;
         this.frameY = Math.floor(Math.random() * 4);
 
-        // Max frames of the creatur
+        // Max frames of the creature
         this.maxFrame = 5;
 
         // Creature's health points
@@ -269,28 +269,38 @@ class Rhinomorph extends Enemy {
 
 }
 // Boss Enemy Class
-class Boss extends Enemy {
+class Boss {
     constructor(game){
-        super(game);
         this.image = document.querySelector('#bossEnemy');
         this.game = game;
         this.width = 200;
         this.height = 200;
         this.x = this.game.width * 0.5 - this.width * 0.5
         this.y = -this.height;
+        this.speedX = Math.random() > 0.5 ? 1 : -1;
+        this.speedY = 0;
+        // Creature's health points
+        this.lives = 10;
+
+        // Maximum creature's live. Using for frameX sprites to show that enemy damaged 
+        this.maxLives = this.lives;
+
+        this.markedForDeletion = false;
 
         // Horizontal/Vertical Frames
         this.frameX = 0;
         this.frameY = Math.floor(Math.random() * 4);
 
-        // Max frames of the creatur
-        this.maxFrame = 5;
+        // Max frames of the creature
+        this.maxFrame = 11;
+    }
 
-        // Creature's health points
-        this.lives = 6;
+    draw(context){
+        context.drawImage(this.image, 0, 0, this.width, this.height, this.x, this.y, this.width, this.height);
+    }
 
-        // Maximum creature's live. Using for frameX sprites to show that enemy damaged 
-        this.maxLives = 6;
+    update(){
+        if(this.y < 0) this.y += 10;
     }
 
     // Change frameX when enemy gets hit. 
@@ -310,6 +320,7 @@ class Wave {
         this.y = -this.height;
         this.speedX = Math.random() < 0.5 ? 1 : -1;
         this.speedY = 0;
+        this.markedForDeletion = false;
 
         this.enemies = [];
 
@@ -346,6 +357,8 @@ class Wave {
         });
 
         this.enemies = this.enemies.filter(object => !object.markedForDeletion)
+
+        if(this.enemies.length <= 0) this.markedForDeletion = true;
     }
 
     // Create array that contains wave of enemies
@@ -390,7 +403,7 @@ class Game {
 
         // Waves of enemies
         this.waves = [];
-        this.waves.push(new Wave(this));
+        //this.waves.push(new Wave(this));
         // Number of waves
         this.waveCount = 1;
 
@@ -408,6 +421,8 @@ class Game {
         this.spriteTimer = 0;
         this.spriteInterval = 120;
 
+        this.bossArray = [];
+        this.restart();
 
         // Events
 
@@ -542,6 +557,7 @@ class Game {
             this.rows++;
         }  
         this.waves.push(new Wave(this))
+        this.waves = this.waves.filter(wave => !wave.markedForDeletion)
     }
 
     // Restart Game
@@ -564,6 +580,10 @@ class Game {
 
         // Game over.
         this.gameOver = false;
+
+        this.bossArray = [];
+
+        this.bossArray.push(new Boss(this));
     }
 }
 
