@@ -256,11 +256,18 @@ class Rhinomorph extends Enemy {
 
         // Creature's health points
         this.lives = 3;
+
+        // Maximum creature's live. Using for frameX sprites to show that enemy damaged 
+        this.maxLives = 3;
+    }
+
+    // Change frameX when enemy gets hit. 
+    hit(damage){
+        this.lives -= damage;
+        this.frameX = this.maxLives - Math.floor(this.lives);
     }
 }
 
-
-       
 
 class Wave {
     constructor(game){
