@@ -543,7 +543,6 @@ class Game {
 
             if(wave.enemies.length < 1 && !wave.nextWaveTrigger && !this.gameOver){
                 this.newWave();
-                this.waveCount += 1;
                 wave.nextWaveTrigger = true;
 
                 // When wave of enemies is destroyed add 1 health point
@@ -611,12 +610,21 @@ class Game {
 
     // Waves Generation
     newWave(){
-        if(Math.random() > 0.5 && this.columns * this.enemySize < this.width * 0.8){
-            this.columns++;
-        } else if(this.rows * this.enemySize < this.height * 0.6) {
-            this.rows++;
-        }  
-        this.waves.push(new Wave(this))
+
+        this.waveCount++;
+
+        if(this.waveCount % 3 === 0){
+            this.bossArray.push(new Boss(this));
+        } else {
+
+            if(Math.random() > 0.5 && this.columns * this.enemySize < this.width * 0.8){
+                this.columns++;
+            } else if(this.rows * this.enemySize < this.height * 0.6) {
+                this.rows++;
+            }  
+            this.waves.push(new Wave(this))
+        }
+
         this.waves = this.waves.filter(wave => !wave.markedForDeletion)
     }
 
