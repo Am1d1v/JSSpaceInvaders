@@ -275,9 +275,9 @@ class Boss {
         this.game = game;
         this.width = 200;
         this.height = 200;
-        this.x = this.game.width * 0.5 - this.width * 0.5
+        this.x = this.game.width * 0.5 - this.width * 0.5;
         this.y = -this.height;
-        this.speedX = Math.random() > 0.5 ? 1 : -1;
+        this.speedX = Math.random() > 0.5 ? -1 : 1;
         this.speedY = 0;
         // Creature's health points
         this.lives = 10;
@@ -296,14 +296,20 @@ class Boss {
     }
 
     draw(context){
-        context.drawImage(this.image, 0, 0, this.width, this.height, this.x, this.y, this.width, this.height);
+        context.drawImage(this.image, 0, this.frameY * this.height, this.width, this.height, this.x, this.y, this.width, this.height);
     }
 
     update(){
+        this.speedY = 0;
         if(this.y < 0) this.y += 10;
 
         // Boss Boundaries
-        if(this.x < 0 || this.x > this.game.width - this.width) this.speedX *= -1;
+        if(this.x < 0 || this.x > this.game.width - this.width){
+            this.speedX *= -1;
+            this.speedY = this.height * 0.5;
+        }
+        this.x += this.speedX;
+        this.y += this.speedY;
     }
 
     // Change frameX when enemy gets hit. 
