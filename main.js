@@ -296,7 +296,15 @@ class Boss {
     }
 
     draw(context){
-        context.drawImage(this.image, 0, this.frameY * this.height, this.width, this.height, this.x, this.y, this.width, this.height);
+        context.drawImage(this.image, this.frameX * this.width, this.frameY * this.height, this.width, this.height, this.x, this.y, this.width, this.height);
+
+        context.save();
+        context.textAlign = 'center';
+        context.shadowOffsetX = 3;
+        context.shadowOffsetY = 3;
+        context.shadowColor = 'black';
+        context.fillText(this.lives, this.x + this.width * 0.5, this.y + 50)
+        context.restore();
     }
 
     update(){
@@ -310,6 +318,15 @@ class Boss {
         }
         this.x += this.speedX;
         this.y += this.speedY;
+
+        // Collision detection boss/projectile
+        this.game.projectilesPool.forEach(projectile => {
+            
+            if(this.game.checkCollision(this, projectile) && !projectile.free && this.lives > 0){
+                this.lives--;
+                projectile.reset();
+            };
+        });
     }
 
     // Change frameX when enemy gets hit. 
