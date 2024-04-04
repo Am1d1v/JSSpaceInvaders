@@ -348,8 +348,13 @@ class Boss {
             if(this.frameX > this.maxFrame){
                 this.markedForDeletion = true;
                 this.game.scores += this.maxLives
+
+                if(!this.game.gameOver) this.game.newWave();
             }
         }
+
+        // Lose Condition. If boss touched the bottom of the screen
+        if(this.y + this.height > this.game.height) this.game.gameOver = true;
 
     }
 
