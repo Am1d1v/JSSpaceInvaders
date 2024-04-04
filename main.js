@@ -326,6 +326,12 @@ class Boss {
         this.x += this.speedX;
         this.y += this.speedY;
 
+        // Collision detection boss/player
+        if(this.game.checkCollision(this, this.game.player) && this.lives > 0){
+            this.game.gameOver = true;
+            this.lives = 0;
+        }
+
         // Collision detection boss/projectile
         this.game.projectilesPool.forEach(projectile => {
             
@@ -338,6 +344,11 @@ class Boss {
         // Boss Destroyed
         if(this.lives < 1 && this.game.spriteUpdate){
             this.frameX++;
+            
+            if(this.frameX > this.maxFrame){
+                this.markedForDeletion = true;
+                this.game.scores += this.maxLives
+            }
         }
 
     }
@@ -514,6 +525,7 @@ class Game {
             boss.draw(context);
             boss.update();
         })
+        this.bossArray = this.bossArray.filter(boss => !boss.markedForDeletion);
         this.player.draw(context);
         this.player.update();
         this.projectilesPool.forEach(projectile => {
