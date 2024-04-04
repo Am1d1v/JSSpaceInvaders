@@ -301,6 +301,9 @@ class Boss {
 
     update(){
         if(this.y < 0) this.y += 10;
+
+        // Boss Boundaries
+        if(this.x < 0 || this.x > this.game.width - this.width) this.speedX *= -1;
     }
 
     // Change frameX when enemy gets hit. 
@@ -471,6 +474,10 @@ class Game {
         }
 
         this.drawStatus(context)
+        this.bossArray.forEach(boss => {
+            boss.draw(context);
+            boss.update();
+        })
         this.player.draw(context);
         this.player.update();
         this.projectilesPool.forEach(projectile => {
@@ -571,7 +578,7 @@ class Game {
 
         // Waves of enemies
         this.waves = [];
-        this.waves.push(new Wave(this));
+        //this.waves.push(new Wave(this));
         // Number of waves
         this.waveCount = 1;
 
@@ -581,8 +588,8 @@ class Game {
         // Game over.
         this.gameOver = false;
 
+        // Boss wave
         this.bossArray = [];
-
         this.bossArray.push(new Boss(this));
     }
 }
