@@ -21,21 +21,25 @@ class Laser {
         context.fillRect(this.x + this.width * 0.2, this.y, this.width * 0.6, this.height);
         context.restore();
 
-        // Laser's damage. Chech collision between enemy and laser
-        this.game.waves.forEach(wave => {
-            wave.enemies.forEach(enemy => {
-                    if(this.game.checkCollision(enemy, this)){
-                        enemy.hit(this.damage);
-                    }
+        if(this.game.spriteUpdate){
+            // Laser's damage. Chech collision between enemy and laser
+            this.game.waves.forEach(wave => {
+                wave.enemies.forEach(enemy => {
+                        if(this.game.checkCollision(enemy, this)){
+                            enemy.hit(this.damage);
+                        }
+                })
             })
-        })
 
-        // Laser's damage. Chech collision between boss and laser
-        this.game.bossArray.forEach(boss => {
-            if(this.game.checkCollision(boss, this)){
-                boss.hit(this.damage);
-            }
-        })
+            // Laser's damage. Chech collision between boss and laser
+            this.game.bossArray.forEach(boss => {
+                if(this.game.checkCollision(boss, this)){
+                    boss.hit(this.damage);
+                }
+            })
+        }
+
+        
 
     }
 }
@@ -44,7 +48,7 @@ class Laser {
 class SmallLaser extends Laser {
     constructor(game){
         super(game);
-        this.width = 30;
+        this.width = 10;
 
         // Damage per laser's tick
         this.damage = 0.3;
@@ -57,7 +61,17 @@ class SmallLaser extends Laser {
 
 // Player's additional weapon
 class BigLaser extends Laser {
+    constructor(game){
+        super(game);
+        this.width = 30;
 
+        // Damage per laser's tick
+        this.damage = 1.8;
+    }
+
+    render(context){
+        super.render(context);
+    }
 }
 
 // Player Class. Movement and animation of the player character.
@@ -91,6 +105,7 @@ class Player {
 
         // Additional weapon
         this.SmallLaser = new SmallLaser(this.game);
+        this.BigLaser = new BigLaser(this.game);
     }
 
     // Draw Player's Model
@@ -103,6 +118,9 @@ class Player {
         } else if (this.game.keys.indexOf('2') > -1) {
             this.frameX = 2;
             this.SmallLaser.render(context);
+        } else if (this.game.keys.indexOf('3') > -1) {
+            this.frameX = 3;
+            this.BigLaser.render(context);
         } else {
             this.frameX = 0;
         }
@@ -371,7 +389,7 @@ class Boss {
             context.shadowOffsetX = 3;
             context.shadowOffsetY = 3;
             context.shadowColor = 'black';
-            context.fillText(this.lives, this.x + this.width * 0.5, this.y + 50)
+            context.fillText(Math.floor(this.lives), this.x + this.width * 0.5, this.y + 50)
             context.restore();
         }
 
@@ -382,10 +400,10 @@ class Boss {
         this.speedY = 0;
         if(this.y < 0) this.y += 10;
 
-        if(this.game.spriteUpdate && this.lives > 0) this.frameX = 0;
+        if(this.game.spriteUpdate && this.lives >= 1) this.frameX = 0;
 
         // Boss Boundaries
-        if(this.x < 0 || this.x > this.game.width - this.width && this.lives > 0){
+        if(this.x < 0 || this.x > this.game.width - this.width && this.lives > 1){
             this.speedX *= -1;
             this.speedY = this.height * 0.5;
         }
@@ -393,7 +411,7 @@ class Boss {
         this.y += this.speedY;
 
         // Collision detection boss/player
-        if(this.game.checkCollision(this, this.game.player) && this.lives > 0){
+        if(this.game.checkCollision(this, this.game.player) && this.lives >= 1){
             this.game.gameOver = true;
             this.lives = 0;
         }
@@ -401,7 +419,7 @@ class Boss {
         // Collision detection boss/projectile
         this.game.projectilesPool.forEach(projectile => {
             
-            if(this.game.checkCollision(this, projectile) && !projectile.free && this.lives > 0){
+            if(this.game.checkCollision(this, projectile) && !projectile.free && this.lives >= 1){
                 this.hit(1);
                 projectile.reset();
             };
@@ -427,7 +445,7 @@ class Boss {
     // Change frameX when enemy gets hit. 
     hit(damage){
         this.lives -= damage;
-        if(this.lives > 0) this.frameX = 1;
+        if(this.lives >= 1) this.frameX = 1;
     }
 }
 
