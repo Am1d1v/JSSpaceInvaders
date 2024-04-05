@@ -3,14 +3,21 @@
 class Laser {
     constructor(game){
         this.game = game;
-        this.x;
-        this.y;
-        this.height;
+        this.x = 0;
+        this.y = 0;
+        this.height = this.game.height - 50;
     } 
 
     // Draw Weapon
     render(context){
 
+        // Update horizontal coordinate to match the position of the player
+        this.x = this.game.player.x;
+
+        context.save();
+        context.fillStyle = 'gold';
+        context.fillRect(this.x, this.y, this.width, this.height)
+        context.restore();
     }
 }
 
