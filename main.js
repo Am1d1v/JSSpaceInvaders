@@ -14,6 +14,9 @@ class Laser {
         // Update horizontal coordinate to match the position of the player
         this.x = this.game.player.x + this.game.player.width * 0.5 - this.width * 0.5;
 
+        // Energy decreases during laser use
+        this.game.player.energy -= this.damage;
+
         context.save();
         context.fillStyle = 'gold';
         context.fillRect(this.x, this.y, this.width, this.height);
@@ -33,7 +36,7 @@ class Laser {
 
             // Laser's damage. Chech collision between boss and laser
             this.game.bossArray.forEach(boss => {
-                if(this.game.checkCollision(boss, this)){
+                if(this.game.checkCollision(boss, this) && boss.y >= 0){
                     boss.hit(this.damage);
                 }
             })
@@ -106,6 +109,11 @@ class Player {
         // Additional weapon
         this.SmallLaser = new SmallLaser(this.game);
         this.BigLaser = new BigLaser(this.game);
+
+        // Resource menagement. Laser's energy
+        this.energy = 50;
+        this.maxEnergy = 100;
+        this.cooldown = false;
     }
 
     // Draw Player's Model
@@ -674,6 +682,11 @@ class Game {
 
         for(let i = 0; i < this.player.lives; i++){
             context.fillRect(20 + 20 * i, 100, 10, 15);
+        }
+
+        // Energy
+        for(let i = 0; i < this.player.energy; i++){
+            context.fillRect( 18 + 2 * i, 135, 3, 15)
         }
 
         // If game is over
