@@ -1,4 +1,13 @@
 
+// Player's additional weapon
+class Laser {
+
+}
+
+// Player's additional weapon
+class SmallLaser extends Laser {
+
+}
 
 // Player Class. Movement and animation of the player character.
 class Player {
@@ -319,7 +328,7 @@ class Boss {
         if(this.game.spriteUpdate && this.lives > 0) this.frameX = 0;
 
         // Boss Boundaries
-        if(this.x < 0 || this.x > this.game.width - this.width){
+        if(this.x < 0 || this.x > this.game.width - this.width && this.lives > 0){
             this.speedX *= -1;
             this.speedY = this.height * 0.5;
         }
@@ -544,9 +553,6 @@ class Game {
             if(wave.enemies.length < 1 && !wave.nextWaveTrigger && !this.gameOver){
                 this.newWave();
                 wave.nextWaveTrigger = true;
-
-                // When wave of enemies is destroyed add 1 health point
-                if(this.player.lives < this.player.maxLives) this.player.lives++;
                 
             }
         });
@@ -612,6 +618,9 @@ class Game {
     newWave(){
 
         this.waveCount++;
+
+        // When wave of enemies is destroyed add 1 health point
+        if(this.player.lives < this.player.maxLives) this.player.lives++;
 
         if(this.waveCount % 3 === 0){
             this.bossArray.push(new Boss(this));
