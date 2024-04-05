@@ -12,11 +12,13 @@ class Laser {
     render(context){
 
         // Update horizontal coordinate to match the position of the player
-        this.x = this.game.player.x;
+        this.x = this.game.player.x + this.game.player.width * 0.5 - this.width * 0.5;
 
         context.save();
         context.fillStyle = 'gold';
-        context.fillRect(this.x, this.y, this.width, this.height)
+        context.fillRect(this.x, this.y, this.width, this.height);
+        context.fillStyle = 'white';
+        context.fillRect(this.x + this.width * 0.2, this.y, this.width * 0.6, this.height);
         context.restore();
     }
 }
@@ -25,7 +27,7 @@ class Laser {
 class SmallLaser extends Laser {
     constructor(game){
         super(game);
-        this.width = 5;
+        this.width = 30;
     }
 
     render(context){
@@ -66,6 +68,9 @@ class Player {
 
         // Jet's Horizontal Frames
         this.jetsFrameX = 1;
+
+        // Additional weapon
+        this.SmallLaser = new SmallLaser(this.game);
     }
 
     // Draw Player's Model
@@ -75,6 +80,9 @@ class Player {
         // Handle player's sprite frames
         if(this.game.keys.indexOf('1') > -1){
             this.frameX = 1;
+        } else if (this.game.keys.indexOf('2') > -1) {
+            this.frameX = 2;
+            this.SmallLaser.render(context);
         } else {
             this.frameX = 0;
         }
