@@ -20,6 +20,23 @@ class Laser {
         context.fillStyle = 'white';
         context.fillRect(this.x + this.width * 0.2, this.y, this.width * 0.6, this.height);
         context.restore();
+
+        // Laser's damage. Chech collision between enemy and laser
+        this.game.waves.forEach(wave => {
+            wave.enemies.forEach(enemy => {
+                    if(this.game.checkCollision(enemy, this)){
+                        enemy.hit(this.damage);
+                    }
+            })
+        })
+
+        // Laser's damage. Chech collision between boss and laser
+        this.game.bossArray.forEach(boss => {
+            if(this.game.checkCollision(boss, this)){
+                boss.hit(this.damage);
+            }
+        })
+
     }
 }
 
@@ -28,6 +45,9 @@ class SmallLaser extends Laser {
     constructor(game){
         super(game);
         this.width = 30;
+
+        // Damage per laser's tick
+        this.damage = 0.3;
     }
 
     render(context){
