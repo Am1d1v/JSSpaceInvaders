@@ -169,6 +169,18 @@ class Player {
         if(this.x > this.game.width - this.width){
             this.x = this.game.width - this.width;
         }
+
+        // Recharge Energy
+        if(this.energy < this.maxEnergy) this.energy += 0.1;
+
+        // Cooldown trigger
+        if(this.energy <= 0) {
+            this.cooldown = true
+            this.energy = 1;
+        }
+
+        // Reset cooldown
+        if(this.energy >= 10) this.cooldown = false;
         
     }
 
@@ -685,9 +697,15 @@ class Game {
         }
 
         // Energy
+        context.save();
+
+        // Change energy bar to red if cooldown == true
+        this.player.cooldown ? context.fillStyle = 'red' : context.fillStyle = 'gold';
+
         for(let i = 0; i < this.player.energy; i++){
             context.fillRect( 18 + 2 * i, 135, 3, 15)
         }
+        context.restore();
 
         // If game is over
         if(this.gameOver){
