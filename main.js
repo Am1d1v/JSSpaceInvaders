@@ -58,7 +58,7 @@ class SmallLaser extends Laser {
     }
 
     render(context){
-        super.render(context);
+        if(this.game.player.energy > 1 && !this.game.player.cooldown) super.render(context);
     }
 }
 
@@ -73,7 +73,7 @@ class BigLaser extends Laser {
     }
 
     render(context){
-        super.render(context);
+        if(this.game.player.energy > 1 && !this.game.player.cooldown) super.render(context);
     }
 }
 
@@ -174,7 +174,7 @@ class Player {
         if(this.energy < this.maxEnergy) this.energy += 0.1;
 
         // Cooldown trigger
-        if(this.energy <= 0) {
+        if(this.energy <= 1) {
             this.cooldown = true
             this.energy = 1;
         }
