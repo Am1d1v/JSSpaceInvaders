@@ -1,11 +1,33 @@
 
 // Player's additional weapon
 class Laser {
+    constructor(game){
+        this.game = game;
+        this.x;
+        this.y;
+        this.height;
+    } 
 
+    // Draw Weapon
+    render(context){
+
+    }
 }
 
 // Player's additional weapon
 class SmallLaser extends Laser {
+    constructor(game){
+        super(game);
+        this.width = 5;
+    }
+
+    render(context){
+        super.render(context);
+    }
+}
+
+// Player's additional weapon
+class BigLaser extends Laser {
 
 }
 
