@@ -394,11 +394,14 @@ class Eaglemorph extends Enemy {
 
         // Maximum creature's live. Using for frameX sprites to show that enemy damaged 
         this.maxLives = this.lives;
+
+
+        this.shots = 0;
     }
 
     // Change frameX when enemy gets hit. 
     hit(damage){
-        this.shoot();
+        if(this.shots < this.maxLives) this.shoot();
         this.lives -= damage;
         this.frameX = this.maxLives - Math.floor(this.lives);
         this.y += 3;
@@ -410,6 +413,7 @@ class Eaglemorph extends Enemy {
         const projectile = this.game.getEnemyProjectile();
         if(projectile) {
             projectile.start(this.x + this.width * 0.5, this.y + this.height);
+            this.shots++;
         }
     }
 
@@ -417,12 +421,18 @@ class Eaglemorph extends Enemy {
 
 // Enemy Projectile Class. Enemie's shooting elements
 class EnemyProjectile {
-    constructor(){
+    constructor(game){
+        this.game = game;
         this.width = 50;
         this.height = 35;
         this.x = 0;
         this.y = 0;
         this.speed = Math.random() * 3 + 3;
+        this.image = document.querySelector('#enemyProjectile');
+
+        // Projectiles' Horizontal/Vertical frames
+        this.frameX = Math.floor(Math.random() * 4);
+        this.frameY = Math.floor(Math.random() * 2);
 
         // Projectile is sitting in the poop and ready to be used.
         this.free = true;
@@ -431,10 +441,7 @@ class EnemyProjectile {
     // Render projectile
     draw(context){
         if(!this.free){
-            context.save()
-            context.fillStyle = 'red';
-            context.fillRect(this.x, this.y, this.width, this.height);
-            context.restore();
+            context.drawImage(this.image, this.frameX * this.width, this.frameY * this.height, this.width, this.height, this.x, this.y, this.width, this.height)
         }
     }
 
@@ -445,7 +452,7 @@ class EnemyProjectile {
         }
 
         // Reset projectiles and become available in the pool again when they fly off screen
-        if(this.y < -this.height){
+        if(this.y > this.game.height){
             this.reset();
         }
     }
@@ -781,7 +788,7 @@ class Game {
     // Create enemy projectiles object pool
     createEnemyProjectiles(){
         for(let i = 0; i < this.numberOfEnemyProjectiles; i++){
-            this.enemyProjectilesPool.push(new EnemyProjectile());
+            this.enemyProjectilesPool.push(new EnemyProjectile(this));
         }
     }
 
