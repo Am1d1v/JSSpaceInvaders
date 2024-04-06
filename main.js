@@ -284,7 +284,7 @@ class Enemy {
                 projectile.reset();
 
                 // When enemy is destroyed scores increase by 1
-                if(!this.game.gameOver) this.game.scores++;
+                if(!this.game.gameOver && this.lives < 1) this.game.scores += this.maxLives;
                 
             }
         });
@@ -342,6 +342,9 @@ class Beetlemorph extends Enemy {
 
         // Creature's health points
         this.lives = 1;
+
+        // Maximum creature's live. Using for frameX sprites to show that enemy damaged 
+        this.maxLives = this.lives;
     }
 }
 
@@ -424,7 +427,7 @@ class EnemyProjectile {
     draw(context){
         if(!this.free){
             context.save()
-            context.fillStyle = 'blue';
+            context.fillStyle = 'gold';
             context.fillRect(this.x, this.y, this.width, this.height);
             context.restore();
         }
@@ -658,6 +661,11 @@ class Game {
         // Number of waves
         this.waveCount = 1;
 
+        // Enemy Projectiles Pool
+        this.enemyProjectilesPool = [];
+        this.numberOfEnemyProjectiles = 15;
+        this.createEnemyProjectiles();
+
         // Scores
         this.scores = 0;
 
@@ -745,7 +753,7 @@ class Game {
         });
     }
 
-    // Create projectiles onject pool
+    // Create projectiles object pool
     createProjectiles(){
         for(let i = 0; i < this.numberOfProjectiles; i++){
             this.projectilesPool.push(new Projectile());
@@ -757,6 +765,22 @@ class Game {
         for(let i = 0; i < this.projectilesPool.length; i++){
             if(this.projectilesPool[i].free){
                 return this.projectilesPool[i];
+            }
+        }
+    }
+
+    // Create enemy projectiles object pool
+    createEnemyProjectiles(){
+        for(let i = 0; i < this.numberOfEnemyProjectiles; i++){
+            this.projectilesPool.push(new EnemyProjectile());
+        }
+    }
+
+    // Get free enemy projectile object from the pool
+    getEnemyProjectile(){
+        for(let i = 0; i < this.enemyProjectilesPool.length; i++){
+            if(this.enemyProjectilesPool[i].free){
+                return this.enemyProjectilesPool[i];
             }
         }
     }
