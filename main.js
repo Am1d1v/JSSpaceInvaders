@@ -373,7 +373,7 @@ class Rhinomorph extends Enemy {
 
 }
 
-// Eaglemorph Enemy Class
+// Eaglemorph Enemy Class.
 class Eaglemorph extends Enemy {
     constructor(game, positionX, positionY){
         super(game, positionX, positionY);
@@ -397,8 +397,62 @@ class Eaglemorph extends Enemy {
     hit(damage){
         this.lives -= damage;
         this.frameX = this.maxLives - Math.floor(this.lives);
+        this.y += 3;
     }
 
+    // When enemy get hit, it tries to hit us back
+    shoot(){
+
+    }
+
+}
+
+// Enemy Projectile Class. Enemie's shooting elements
+class EnemyProjectile {
+    constructor(){
+        this.width = 50;
+        this.height = 35;
+        this.x = 0;
+        this.y = 0;
+        this.speed = Math.random() * 3 + 3;
+
+        // Projectile is sitting in the poop and ready to be used.
+        this.free = true;
+    }
+
+    // Render projectile
+    draw(context){
+        if(!this.free){
+            context.save()
+            context.fillStyle = 'blue';
+            context.fillRect(this.x, this.y, this.width, this.height);
+            context.restore();
+        }
+    }
+
+    // Update projectile's data
+    update(){
+        if(!this.free){
+            this.y -= this.speed;
+        }
+
+        // Reset projectiles and become available in the pool again when they fly off screen
+        if(this.y < -this.height){
+            this.reset();
+        }
+    }
+
+    // Shoot projectile
+    start(x, y){
+        this.x = x - this.width * 0.5;
+        this.y = y;
+        this.free = false;
+    }
+
+    // Return back to the object pool
+    reset(){
+        this.free = true;
+    }
 }
 
 // Boss Enemy Class
