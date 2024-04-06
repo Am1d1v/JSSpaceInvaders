@@ -447,10 +447,18 @@ class EnemyProjectile {
             if(this.game.checkCollision(this, this.game.player)){
                 this.game.player.lives--;
 
+                // Game over
                 if(this.game.player.lives < 1) this.game.gameOver = true;
+                // Reset projectile
                 this.reset();
-
             }
+
+            // Check collision between enemy projectile and player's projectile. Player can destroy enemy projectile
+            this.game.projectilesPool.forEach(projectile => {
+                if(this.game.checkCollision(this, projectile)){
+                    this.reset();
+                }
+            })
         }
     }
 
