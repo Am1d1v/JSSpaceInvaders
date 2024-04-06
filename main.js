@@ -362,7 +362,7 @@ class Rhinomorph extends Enemy {
         this.lives = 3;
 
         // Maximum creature's live. Using for frameX sprites to show that enemy damaged 
-        this.maxLives = 3;
+        this.maxLives = this.lives;
     }
 
     // Change frameX when enemy gets hit. 
@@ -372,6 +372,35 @@ class Rhinomorph extends Enemy {
     }
 
 }
+
+// Eaglemorph Enemy Class
+class Eaglemorph extends Enemy {
+    constructor(game, positionX, positionY){
+        super(game, positionX, positionY);
+        this.image = document.querySelector('#eaglemorphEnemy');
+
+        // Horizontal/Vertical Frames
+        this.frameX = 0;
+        this.frameY = Math.floor(Math.random() * 4);
+
+        // Max frames of the creature
+        this.maxFrame = 8;
+
+        // Creature's health points
+        this.lives = 4;
+
+        // Maximum creature's live. Using for frameX sprites to show that enemy damaged 
+        this.maxLives = this.lives;
+    }
+
+    // Change frameX when enemy gets hit. 
+    hit(damage){
+        this.lives -= damage;
+        this.frameX = this.maxLives - Math.floor(this.lives);
+    }
+
+}
+
 // Boss Enemy Class
 class Boss {
     constructor(game){
@@ -528,9 +557,18 @@ class Wave {
                 let enemyX = x * this.game.enemySize;
                 let enemyY = y * this.game.enemySize;
                 //this.enemies.push(new Beetlemorph(this.game, enemyX, enemyY))
-                Math.random() > 0.8 
-                            ? this.enemies.push(new Rhinomorph(this.game, enemyX, enemyY))
-                            : this.enemies.push(new Beetlemorph(this.game, enemyX, enemyY))
+                // Math.random() > 0.8 
+                //             ? this.enemies.push(new Rhinomorph(this.game, enemyX, enemyY))
+                //             : this.enemies.push(new Beetlemorph(this.game, enemyX, enemyY))
+                if(Math.random() > 0.8) {
+                    this.enemies.push(new Rhinomorph(this.game, enemyX, enemyY))
+                } else if (Math.random() > 0.6) {
+                    this.enemies.push(new Eaglemorph(this.game, enemyX, enemyY))
+                } else {
+                    this.enemies.push(new Beetlemorph(this.game, enemyX, enemyY))
+                }
+
+
             }
         }
 
@@ -754,7 +792,7 @@ class Game {
 
         // Waves of enemies
         this.waves = [];
-        //this.waves.push(new Wave(this));
+        this.waves.push(new Wave(this));
         // Number of waves
         this.waveCount = 1;
 
@@ -766,7 +804,7 @@ class Game {
 
         // Boss wave
         this.bossArray = [];
-        this.bossArray.push(new Boss(this));
+        //this.bossArray.push(new Boss(this));
     }
 }
 
