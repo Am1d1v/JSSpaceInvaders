@@ -398,14 +398,19 @@ class Eaglemorph extends Enemy {
 
     // Change frameX when enemy gets hit. 
     hit(damage){
+        this.shoot();
         this.lives -= damage;
         this.frameX = this.maxLives - Math.floor(this.lives);
         this.y += 3;
+        
     }
 
     // When enemy get hit, it tries to hit us back
     shoot(){
-
+        const projectile = this.game.getEnemyProjectile();
+        if(projectile) {
+            projectile.start(this.x + this.width * 0.5, this.y + this.height);
+        }
     }
 
 }
@@ -427,7 +432,7 @@ class EnemyProjectile {
     draw(context){
         if(!this.free){
             context.save()
-            context.fillStyle = 'gold';
+            context.fillStyle = 'red';
             context.fillRect(this.x, this.y, this.width, this.height);
             context.restore();
         }
@@ -436,7 +441,7 @@ class EnemyProjectile {
     // Update projectile's data
     update(){
         if(!this.free){
-            this.y -= this.speed;
+            this.y += this.speed;
         }
 
         // Reset projectiles and become available in the pool again when they fly off screen
@@ -742,6 +747,12 @@ class Game {
             projectile.draw(context);
         });
 
+        // Enemy Projectiles
+        this.enemyProjectilesPool.forEach(projectile => {
+            projectile.update();
+            projectile.draw(context);
+        });
+
         this.waves.forEach(wave => {
             wave.render(context);
 
@@ -763,25 +774,21 @@ class Game {
     // Get free projectile object from the pool
     getProjectile(){
         for(let i = 0; i < this.projectilesPool.length; i++){
-            if(this.projectilesPool[i].free){
-                return this.projectilesPool[i];
-            }
+            if(this.projectilesPool[i].free) return this.projectilesPool[i];
         }
     }
 
     // Create enemy projectiles object pool
     createEnemyProjectiles(){
         for(let i = 0; i < this.numberOfEnemyProjectiles; i++){
-            this.projectilesPool.push(new EnemyProjectile());
+            this.enemyProjectilesPool.push(new EnemyProjectile());
         }
     }
 
     // Get free enemy projectile object from the pool
     getEnemyProjectile(){
         for(let i = 0; i < this.enemyProjectilesPool.length; i++){
-            if(this.enemyProjectilesPool[i].free){
-                return this.enemyProjectilesPool[i];
-            }
+            if(this.enemyProjectilesPool[i].free) return this.enemyProjectilesPool[i];
         }
     }
 
