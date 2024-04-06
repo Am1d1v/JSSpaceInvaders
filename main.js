@@ -442,6 +442,15 @@ class EnemyProjectile {
     draw(context){
         if(!this.free){
             context.drawImage(this.image, this.frameX * this.width, this.frameY * this.height, this.width, this.height, this.x, this.y, this.width, this.height)
+
+            // Check collision between enemie's projectile and player
+            if(this.game.checkCollision(this, this.game.player)){
+                this.game.player.lives--;
+
+                if(this.game.player.lives < 1) this.game.gameOver = true;
+                this.reset();
+
+            }
         }
     }
 
@@ -455,6 +464,8 @@ class EnemyProjectile {
         if(this.y > this.game.height){
             this.reset();
         }
+
+        
     }
 
     // Shoot projectile
