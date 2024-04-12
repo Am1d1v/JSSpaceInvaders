@@ -152,13 +152,13 @@ class Player {
         // ArrowLeft was pressed
         if(this.game.keys.indexOf('ArrowLeft') > -1){
             // Update horizontal player position
-        this.x -= this.speed;
+            this.x -= this.speed;
         }
 
         // ArrowRight was pressed
         if(this.game.keys.indexOf('ArrowRight') > -1){
             // Update horizontal player position
-        this.x += this.speed;
+            this.x += this.speed;
         }
 
         // Horizontal Boundaries
@@ -567,6 +567,7 @@ class Boss {
             this.frameX++;
             
             if(this.frameX > this.maxFrame){
+                this.game.sound.boom1.play();
                 this.markedForDeletion = true;
                 this.game.scores += this.maxLives
 
@@ -575,7 +576,10 @@ class Boss {
         }
 
         // Lose Condition. If boss touched the bottom of the screen
-        if(this.y + this.height > this.game.height) this.game.gameOver = true;
+        if(this.y + this.height > this.game.height){
+            this.game.gameOver = true;
+            this.game.sound.lose.play();
+        };
 
     }
 
@@ -634,7 +638,10 @@ class Wave {
 
         this.enemies = this.enemies.filter(object => !object.markedForDeletion)
 
-        if(this.enemies.length <= 0) this.markedForDeletion = true;
+        if(this.enemies.length <= 0){
+            this.markedForDeletion = true
+        };
+
     }
 
     // Create array that contains wave of enemies
@@ -663,6 +670,14 @@ class Wave {
         
     }
     
+}
+
+// Audio Control
+class AudioControl{
+    constructor() {
+        this.newgame = document.querySelector('#newgame');
+        this.boom1 = document.querySelector('#boom1');
+    }
 }
 
 // Game Class. Main logic of the game
@@ -713,6 +728,9 @@ class Game {
 
         this.bossArray = [];
         this.restart();
+
+        // Sounds
+        this.sound = new AudioControl();
 
         // Events
 
@@ -871,7 +889,6 @@ class Game {
 
     // Waves Generation
     newWave(){
-
         this.waveCount++;
 
         // When wave of enemies is destroyed add 1 health point
